@@ -56,17 +56,13 @@
       <div class="panel-head">
         <h2>Ventas reales vs. predichas</h2>
         <div class="chart-tools">
-          <label class="sr">Categoría
-            <select id="filter-category" class="filter"></select>
-          </label>
-          <label class="sr">Producto
-            <select id="filter-product" class="filter"></select>
-          </label>
+          <select id="filter-category" class="filter" aria-label="Categoría"></select>
+          <select id="filter-product" class="filter" aria-label="Producto"></select>
           <div class="seg" role="group" aria-label="Zoom">
             <button type="button" id="zoom-out" title="Alejar">−</button>
+            <button type="button" id="zoom-reset" title="Restablecer zoom">Restablecer</button>
             <button type="button" id="zoom-in" title="Acercar">+</button>
           </div>
-          <button type="button" id="zoom-reset" class="btn-ghost">Restablecer</button>
           <div class="seg" role="group" aria-label="Métrica">
             <button type="button" class="on" data-metric="revenue">COP</button>
             <button type="button" data-metric="qty">Unidades</button>
