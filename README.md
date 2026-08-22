@@ -1,52 +1,40 @@
 # Dashboard de ventas con ML
 
-Stack: PostgreSQL (contenedor existente) → Pandas / Scikit-learn → FastAPI → D3.js.
+Stack: PostgreSQL propio → Pandas / Scikit-learn → FastAPI → D3.js.
 
 **Restricción:** no instales Python ni Postgres en el host. Solo Docker.
+
+Este Compose levanta **su propio** Postgres (`analisis-mercado-db`, imagen local `postgres:16-alpine`). No usa ni modifica `planificador-postgres`. El puerto 5432 no se publica al host.
 
 ## Requisitos
 
 - Docker y Docker Compose
-- Un PostgreSQL ya levantado en Docker (en esta máquina: `planificador-postgres`)
 
-## Conectar al Postgres existente
+## Configuración
 
-1. Nombre del contenedor y su red:
-
-```bash
-docker ps --format '{{.Names}} {{.Image}}'
-docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}}{{end}}' NOMBRE_CONTENEDOR_POSTGRES
-```
-
-2. Copia [`.env.example`](.env.example) a `.env` y rellena:
+Copia [`.env.example`](.env.example) a `.env` si no existe:
 
 | Variable | Qué es |
 |---|---|
-| `POSTGRES_DOCKER_NETWORK` | Red del contenedor Postgres |
-| `POSTGRES_HOST` | Nombre del contenedor (DNS interno, no `localhost`) |
-| `POSTGRES_PORT` | Casi siempre `5432` |
-| `POSTGRES_USER` / `POSTGRES_PASSWORD` | Credenciales existentes |
-| `POSTGRES_DB` | `analisis_mercado` (el ETL la crea; no toca otras bases) |
-| `POSTGRES_ADMIN_DB` | Base a la que conectar para `CREATE DATABASE` |
-
-Valores por defecto de este entorno:
-
-- red `planificador-eventos_default`
-- host `planificador-postgres`
-- usuario/clave `planificador`
+| `POSTGRES_HOST` | Servicio Compose (`db`) |
+| `POSTGRES_PORT` | `5432` (interno) |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` | Credenciales de este stack |
+| `POSTGRES_DB` | `analisis_mercado` |
+| `POSTGRES_ADMIN_DB` | `postgres` (para `CREATE DATABASE` si hace falta) |
 
 ## Arranque
 
 ```bash
 DOCKER_SCAN_SUGGEST=false docker compose build
+docker compose up -d db
 docker compose run --rm etl
-docker compose up api
+docker compose up -d api
 ```
 
-`docker scan` no es un error: es un aviso de Snyk tras un build correcto.
-
-- ETL: schema, datos sintéticos (24 meses), RandomForest, pronósticos 7/15/30.
+- ETL: schema, datos sintéticos (24 meses), RandomForest, pronósticos 7/15/30. **Borra y regenera** las tablas.
 - API + dashboard: [http://localhost:8000](http://localhost:8000)
+
+Si ya restauraste un dump, no hace falta el ETL: `docker compose up -d`.
 
 Re-entrenar:
 
@@ -54,7 +42,11 @@ Re-entrenar:
 docker compose run --rm etl
 ```
 
-Parar el dashboard: `docker compose stop api`
+Parar este stack (no toca otros proyectos):
+
+```bash
+docker compose stop
+```
 
 ## Pantallas
 

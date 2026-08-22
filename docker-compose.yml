@@ -1,4 +1,21 @@
 services:
+  db:
+    image: postgres:16-alpine
+    pull_policy: never
+    container_name: analisis-mercado-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
   api:
     build: .
     image: analisis-mercado
@@ -6,20 +23,22 @@ services:
     ports:
       - "8000:8000"
     env_file: .env
-    networks:
-      - pgnet
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
   etl:
     image: analisis-mercado
     command: python3 -m etl.run
     env_file: .env
-    networks:
-      - pgnet
+    depends_on:
+      db:
+        condition: service_healthy
     profiles:
       - etl
 
-networks:
-  pgnet:
-    name: ${POSTGRES_DOCKER_NETWORK:?definir POSTGRES_DOCKER_NETWORK en .env}
+volumes:
+  pgdata:
+    name: analisis-mercado_pgdata
     external: true
