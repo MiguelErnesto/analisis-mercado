@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resumen ejecutivo — Ventas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Resumen ejecutivo</h1>
+        <p>Ventas últimas 12 meses vs. modelo Random Forest</p>
+      </div>
+      <nav>
+        <a class="active" href="/">Resumen</a>
+        <a href="/analisis">Análisis</a>
+      </nav>
+    </header>
+
+    <section class="kpis">
+      <article class="kpi">
+        <div class="label">Ventas totales</div>
+        <div class="value" id="kpi-ventas">—</div>
+        <div class="sub">Acumulado 12 meses</div>
+      </article>
+      <article class="kpi">
+        <div class="label">Total de unidades</div>
+        <div class="value" id="kpi-unidades">—</div>
+        <div class="sub">Piezas vendidas, 12 meses</div>
+      </article>
+      <article class="kpi">
+        <div class="label">Crecimiento interanual</div>
+        <div class="value" id="kpi-yoy">—</div>
+        <div class="sub">Vs. los 12 meses anteriores</div>
+      </article>
+      <article class="kpi">
+        <div class="label">Ticket promedio</div>
+        <div class="value" id="kpi-ticket">—</div>
+        <div class="sub">Ingreso medio por línea</div>
+      </article>
+    </section>
+
+    <div class="metrics">
+      <span id="m-r2">R² —</span>
+      <span id="m-mae">MAE —</span>
+      <span id="m-mape">MAPE —</span>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Ventas reales vs. predichas</h2>
+        <div class="chart-tools">
+          <label class="sr">Categoría
+            <select id="filter-category" class="filter"></select>
+          </label>
+          <label class="sr">Producto
+            <select id="filter-product" class="filter"></select>
+          </label>
+          <div class="seg" role="group" aria-label="Zoom">
+            <button type="button" id="zoom-out" title="Alejar">−</button>
+            <button type="button" id="zoom-in" title="Acercar">+</button>
+          </div>
+          <button type="button" id="zoom-reset" class="btn-ghost">Restablecer</button>
+          <div class="seg" role="group" aria-label="Métrica">
+            <button type="button" class="on" data-metric="revenue">COP</button>
+            <button type="button" data-metric="qty">Unidades</button>
+          </div>
+          <div class="seg" role="group" aria-label="Horizonte de pronóstico">
+            <button type="button" class="on" data-horizon="7">7 días</button>
+            <button type="button" data-horizon="15">15 días</button>
+            <button type="button" data-horizon="30">30 días</button>
+          </div>
+        </div>
+      </div>
+      <p class="caption">COP o Unidades cambia el eje Y. El tooltip siempre muestra pesos y piezas. Filtro categoría/producto aplica a ambas.</p>
+      <div class="legend">
+        <span><i style="background:#d7dee8"></i><span id="leg-real">Real ($ / und.)</span></span>
+        <span><i style="background:#4aa3e8"></i><span id="leg-pred">Predicho</span></span>
+        <span><i style="background:#4ecf9a"></i>Pronóstico</span>
+      </div>
+      <div id="trend-chart" class="chart"></div>
+    </section>
+
+    <footer>Fuente: PostgreSQL · serie diaria sintética estilo Superstore · RandomForestRegressor</footer>
+  </div>
+  <script type="module" src="/static/js/resumen.js"></script>
+</body>
+</html>

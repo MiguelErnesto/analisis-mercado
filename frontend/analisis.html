@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Análisis — Ventas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Análisis</h1>
+        <p>Qué mueve el carrito, dónde y si las promociones pagan</p>
+      </div>
+      <nav>
+        <a href="/">Resumen</a>
+        <a class="active" href="/analisis">Análisis</a>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Rendimiento por categoría</h2>
+      </div>
+      <p class="caption">Clic en una barra para ver los productos más vendidos de esa categoría.</p>
+      <div class="grid-2">
+        <div id="cat-chart" class="chart short"></div>
+        <div id="cat-products" class="product-list">
+          <p class="caption" id="cat-products-title">Ninguna categoría seleccionada.</p>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Producto</th><th>Ventas</th><th>Unidades</th></tr>
+            </thead>
+            <tbody id="cat-products-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid-2">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Rendimiento por tienda</h2>
+        </div>
+        <p class="caption">Burbuja = ventas totales. Proyección Mercator sobre Colombia.</p>
+        <div id="map-chart" class="chart"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Impacto de promociones</h2>
+        </div>
+        <p class="caption" id="promo-lift">Comparación de venta diaria media, días con vs. sin promo.</p>
+        <div id="promo-chart" class="chart short"></div>
+      </section>
+    </div>
+
+    <footer>Fuente: PostgreSQL · ventas diarias por tienda y categoría</footer>
+  </div>
+  <script type="module" src="/static/js/analisis.js"></script>
+</body>
+</html>
