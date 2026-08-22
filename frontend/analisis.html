@@ -27,14 +27,14 @@
       <div class="panel-head">
         <h2>Rendimiento por categoría</h2>
       </div>
-      <p class="caption">Clic en una barra para ver los productos más vendidos de esa categoría.</p>
+      <p class="caption">Por defecto, la categoría con más ventas. Clic en otra barra para cambiar.</p>
       <div class="grid-2">
         <div id="cat-chart" class="chart short"></div>
         <div id="cat-products" class="product-list">
           <p class="caption" id="cat-products-title">Ninguna categoría seleccionada.</p>
           <table>
             <thead>
-              <tr><th>#</th><th>Producto</th><th>Ventas</th><th>Unidades</th></tr>
+              <tr><th>#</th><th>Producto</th><th>Ventas</th><th>Unidades</th><th>Con promo</th></tr>
             </thead>
             <tbody id="cat-products-body"></tbody>
           </table>
@@ -47,7 +47,7 @@
         <div class="panel-head">
           <h2>Rendimiento por tienda</h2>
         </div>
-        <p class="caption">Burbuja = ventas totales. Proyección Mercator sobre Colombia.</p>
+        <p class="caption">Burbuja = ventas. Color por tienda. Ciudades vecinas se desplazan un poco para no taparse.</p>
         <div id="map-chart" class="chart"></div>
       </section>
       <section class="panel">

@@ -118,7 +118,9 @@ def by_product(conn, category: str) -> list[dict]:
             p.name,
             p.category,
             SUM(s.revenue)::float AS revenue,
-            SUM(s.qty)::int AS qty
+            SUM(s.qty)::int AS qty,
+            COALESCE(SUM(s.qty) FILTER (WHERE s.promo), 0)::int AS promo_qty,
+            COALESCE(SUM(s.revenue) FILTER (WHERE s.promo), 0)::float AS promo_revenue
         FROM sales s
         JOIN products p ON p.id = s.product_id
         WHERE p.category = %s
