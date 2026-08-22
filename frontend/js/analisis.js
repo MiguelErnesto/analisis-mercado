@@ -67,6 +67,7 @@ function barChart(el, data, { key, label, onSelect }) {
   }
 
   g.selectAll(".tick text").on("click", (event, name) => select(name));
+  if (data.length) select(data[0][label]);
 }
 
 function promoBars(el, impact) {
