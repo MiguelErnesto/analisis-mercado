@@ -5,13 +5,16 @@ from pathlib import Path
 import psycopg
 from psycopg import ClientCursor, sql
 
-from etl.dbconfig import admin_db, pg_kwargs
+from etl.dbconfig import admin_db, managed_postgres, pg_kwargs
 from etl.generate_data import generate
 
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / "db" / "schema.sql"
 
 
 def ensure_database() -> None:
+    if managed_postgres():
+        print("Postgres gestionado: se omite CREATE DATABASE")
+        return
     target = pg_kwargs()["dbname"]
     with psycopg.connect(**pg_kwargs(admin_db()), autocommit=True) as conn:
         exists = conn.execute(
